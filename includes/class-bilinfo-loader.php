@@ -3,7 +3,7 @@
 /**
  * Register all actions and filters for the plugin
  *
- * @link       http://example.com
+ * @link       https://podi.dk
  * @since      1.0.0
  *
  * @package    bilinfo
@@ -19,7 +19,7 @@
  *
  * @package    bilinfo
  * @subpackage bilinfo/includes
- * @author     Your Name <email@example.com>
+ * @author     Podi <info@podi.dk>
  */
 class bilinfo_Loader
 {

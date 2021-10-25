@@ -6,7 +6,7 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       http://example.com
+ * @link       https://podi.dk
  * @since      1.0.0
  *
  * @package    bilinfo
@@ -25,7 +25,7 @@
  * @since      1.0.0
  * @package    bilinfo
  * @subpackage bilinfo/includes
- * @author     Your Name <email@example.com>
+ * @author     Podi <info@podi.dk>
  */
 class bilinfo
 {
@@ -124,6 +124,15 @@ class bilinfo
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-bilinfo-public.php';
 
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/custom-post-types.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/acf/acf-biler.php';
+		// require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-helpers.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-case.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-api.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-log.php';
+		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-bilinfo-media-queue.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-import.php';
+
 		$this->loader = new bilinfo_Loader();
 	}
 
@@ -158,6 +167,17 @@ class bilinfo
 
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+		$this->loader->add_action('admin_init', $plugin_admin, 'child_plugin_has_parent_plugin');
+
+		// Add menu item
+		$this->loader->add_action('admin_menu', $plugin_admin, 'add_plugin_admin_menu');
+
+		// Add Settings link to the plugin
+		$plugin_basename = plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php');
+		$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_action_links');
+
+		// Save/Update our plugin options
+		$this->loader->add_action('admin_init', $plugin_admin, 'options_update');
 	}
 
 	/**
@@ -172,8 +192,10 @@ class bilinfo
 
 		$plugin_public = new bilinfo_Public($this->get_bilinfo(), $this->get_version());
 
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+		$api = new bilinfo_API();
+
+		$this->loader->add_action('wp', $plugin_public, 'init');
+		$this->loader->add_action('bilinfo_after_case', $api, 'enqueue_case_scripts');
 	}
 
 	/**

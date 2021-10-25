@@ -6,7 +6,7 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       http://example.com
+ * @link       https://podi.dk
  * @since      1.0.0
  *
  * @package    bilinfo
@@ -22,7 +22,7 @@
  * @since      1.0.0
  * @package    bilinfo
  * @subpackage bilinfo/includes
- * @author     Your Name <email@example.com>
+ * @author     Podi <info@podi.dk>
  */
 class bilinfo_i18n
 {

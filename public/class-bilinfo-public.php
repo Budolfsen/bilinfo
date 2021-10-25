@@ -3,7 +3,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       http://example.com
+ * @link       https://podi.dk
  * @since      1.0.0
  *
  * @package    bilinfo
@@ -53,6 +53,18 @@ class bilinfo_Public
 
 		$this->bilinfo = $bilinfo;
 		$this->version = $version;
+	}
+
+	public function init()
+	{
+
+		if (isset($_GET['bilinfo_update']) && $_GET['key'] == 'sd5d2rf16') {
+			$force = (isset($_GET['force'])) ?: false;
+			$debug = (isset($_GET['debug'])) ?: false;
+			$import = new Bilinfo_Import();
+			$import->import_cases($force, $debug);
+			die();
+		}
 	}
 
 	/**
