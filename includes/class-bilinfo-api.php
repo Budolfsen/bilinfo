@@ -20,20 +20,14 @@ class bilinfo_API
 	/* Get cases from bilinfo. Returns array if data is given, false otherwise */
 	public function get_cases()
 	{
-		$resp = wp_remote_get($this->base_url, array(
-			'headers' => array(
-				'Authorization' => 'Basic ' . base64_encode($this->username . ':' . $this->password),
-				"content-type" => "application/json",
-				"sslverify" => true
-			)
-		));
-
-		var_dump($resp);
-
+		$resp = wp_remote_get($this->base_url, $this->header);
 
 		if (!is_wp_error($resp)) {
 
-			$cases = json_decode($resp['body']);
+			$JSON = json_decode($resp['body']);
+
+			$vehicles = (array) $JSON;
+			$cases = $vehicles['Vehicles'];
 
 			if (is_array($cases) && count($cases) > 0) {
 				return $cases;
@@ -73,11 +67,44 @@ class bilinfo_API
 		$args = array(
 			'headers' => array(
 				'Authorization' => 'Basic ' . base64_encode($this->username . ':' . $this->password),
-				"content-type" => "application/json",
-				"sslverify" => true
-			)
+			),
+			'user-agent'  =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8) AppleWebKit/535.6.2 (KHTML, like Gecko) Version/5.2 Safari/535.6.2',
 		);
 
 		return $args;
+	}
+
+	public function set_property_url($property_url, $bilID)
+	{
+
+		if (BILINFO_DEV) {
+			echo 'Is dev.. Skipping';
+			return false;
+		}
+
+		$url = $this->base_url;
+
+
+		$args = $this->get_header_args();
+
+		$args['method'] = 'GET';
+		$args['body'] = array(
+			'bilID' => $bilID,
+			'uri' => $property_url
+		);
+
+		//return false;
+		$response = wp_remote_post($url, $args);
+
+		return $response;
+	}
+
+	public function enqueue_case_scripts()
+	{
+		if (BILINFO_DEV == true) {
+			return false;
+		}
+		echo '<script>var bilinfoId = "' . get_post_meta(get_the_ID(), 'Id', true) . '";</script>';
+		echo '<script src="' . $this->base_url . 'getStatsScript.js" defer></script>';
 	}
 }

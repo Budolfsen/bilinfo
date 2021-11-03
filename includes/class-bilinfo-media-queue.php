@@ -125,11 +125,10 @@ class bilinfo_Media_Queue
 
 		$case = new bilinfo_Case($this->getPostId());
 		$case->fetch();
-		$drawing = ($this->getType() == 'drawing') ?: false;
-		$download = bilinfo_Import::check_and_download_single_image($case, $this->getUrl(), $drawing);
+		$download = bilinfo_Import::check_and_download_single_image($case, $this->getUrl());
 		new bilinfo_Log('running_queue', array($this->getId(), $this->getType(), $this->getUrl(), $this->getPostId(), 'download: ' . $download));
 		$this->delete();
-		bilinfo_Helpers::post_without_wait(get_home_url() . '?run_queue=1');
+		Bilinfo_Helpers::post_without_wait(get_home_url() . '?run_queue=1');
 	}
 
 

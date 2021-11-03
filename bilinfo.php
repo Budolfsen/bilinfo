@@ -36,7 +36,7 @@ if (!defined('WPINC')) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define('BILINFO_VERSION', '1.0.0');
-
+define('BILINFO_DEV', false);
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-bilinfo-activator.php

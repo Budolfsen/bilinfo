@@ -126,11 +126,11 @@ class bilinfo
 
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/custom-post-types.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/acf/acf-biler.php';
-		// require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-helpers.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-helpers.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-case.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-api.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-log.php';
-		//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-bilinfo-media-queue.php';
+		// require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-media-queue.php';
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-bilinfo-import.php';
 
 		$this->loader = new bilinfo_Loader();
@@ -191,11 +191,14 @@ class bilinfo
 	{
 
 		$plugin_public = new bilinfo_Public($this->get_bilinfo(), $this->get_version());
-
 		$api = new bilinfo_API();
 
 		$this->loader->add_action('wp', $plugin_public, 'init');
-		$this->loader->add_action('bilinfo_after_case', $api, 'enqueue_case_scripts');
+		$this->loader->add_action('wp_ajax_nopriv_submit_bilinfo_form', $api, 'submit_bilinfo_form');
+		$this->loader->add_action('wp_ajax_submit_bilinfo_form', $api, 'submit_bilinfo_form');
+		$this->loader->add_action('wp_ajax_nopriv_submit_search_agent_form', $api, 'submit_search_agent_form');
+		$this->loader->add_action('wp_ajax_submit_search_agent_form', $api, 'submit_search_agent_form');
+		$this->loader->add_action('bilinfopress_after_case', $api, 'enqueue_case_scripts');
 	}
 
 	/**
