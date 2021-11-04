@@ -28,19 +28,21 @@ class bilinfo_Import
 		if ($api_cases && count($api_cases) > 0) {
 			new bilinfo_Log('import_started', $api_cases);
 			foreach ($api_cases as $case) {
-				echo "updating case: $case->VehicleId<br>";
-				$this->import_case($case, $force);
-				$ex_case = array_search($case->VehicleId, $existing_cases);
+				if ($case->PriceType == 'Leasing') {
+					echo "updating case: $case->VehicleId<br>";
+					$this->import_case($case, $force);
+					$ex_case = array_search($case->VehicleId, $existing_cases);
 
-				if ($ex_case) {
-					unset($existing_cases[$ex_case]);
+					if ($ex_case) {
+						unset($existing_cases[$ex_case]);
+					}
+					$count++;
+					if ($count === $limit) {
+						echo 'Reached Limit.. Terminating';
+						die();
+					}
+					echo '<br>';
 				}
-				$count++;
-				if ($count === $limit) {
-					echo 'Reached Limit.. Terminating';
-					die();
-				}
-				echo '<br>';
 			}
 
 			if (count($existing_cases)) {
@@ -109,7 +111,7 @@ class bilinfo_Import
 		$case->setColor($c->Color);
 		$case->setAcceleration0To100($c->Acceleration0To100);
 		$case->setGeartype($c->GearType);
-		$case->setPayload($c->Payload);
+		$case->setNumberOfDoors($c->NumberOfDoors);
 		$case->setNumberOfAirbags($c->NumberOfAirbags);
 		$case->setKmPerLiter($c->KmPerLiter);
 		$case->setPropellant($c->Propellant);
@@ -132,6 +134,8 @@ class bilinfo_Import
 		$case->setHash($hash);
 
 		$saved_id = $case->save();
+
+		// var_dump($case);
 
 		new bilinfo_Log('import_case', array('bilID' => $c->VehicleId, 'saved' => $saved_id));
 

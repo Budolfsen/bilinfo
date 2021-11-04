@@ -15,7 +15,7 @@ class bilinfo_Case
   private $color;
   private $acceleration0To100;
   private $gearType;
-  private $payLoad;
+  private $numberOfDoors;
   private $numberOfAirbags;
   private $kmPerLiter;
   private $propellant;
@@ -32,6 +32,7 @@ class bilinfo_Case
   private $leasingDownPayment;
   private $leasingResidualValue;
   private $comment;
+  private $equipmentList;
   private $pictures;
   private $videos;
   private $hash;
@@ -100,7 +101,7 @@ class bilinfo_Case
         'color'          => $this->getColor(),
         'Acceleration0To100'          => $this->getAcceleration0To100(),
         'gearType'          => $this->getGeartype(),
-        'payLoad'          => $this->getPayload(),
+        'numberOfDoors'          => $this->getnumberOfDoors(),
         'numberOfAirbags'          => $this->getNumberOfAirbags(),
         'KmPerLiter'          => $this->getKmPerLiter(),
         'propellant'          => $this->getPropellant(),
@@ -305,7 +306,7 @@ class bilinfo_Case
   }
 
   /**
-   * @param mixed $payLoad
+   * @param mixed $numberOfDoors
    */
   public function setKmPerLiter($kmPerLiter)
   {
@@ -321,7 +322,7 @@ class bilinfo_Case
   }
 
   /**
-   * @param mixed $payLoad
+   * @param mixed $numberOfDoors
    */
   public function setNumberOfAirbags($numberOfAirbags)
   {
@@ -331,17 +332,17 @@ class bilinfo_Case
   /**
    * @return mixed
    */
-  public function getPayload()
+  public function getNumberOfDoors()
   {
-    return $this->payLoad;
+    return $this->numberOfDoors;
   }
 
   /**
-   * @param mixed $payLoad
+   * @param mixed $numberOfDoors
    */
-  public function setPayload($payLoad)
+  public function setNumberOfDoors($numberOfDoors)
   {
-    $this->payLoad = $payLoad;
+    $this->numberOfDoors = $numberOfDoors;
   }
 
   /**
@@ -755,15 +756,17 @@ class bilinfo_Case
    */
   public function getEquipmentlist()
   {
-    return $this->equipmentlist;
+
+    return implode(',<br>', $this->equipmentList);
   }
 
   /**
-   * @param mixed $equipmentlist
+   * @param mixed $equipmentList
    */
-  public function setEquipmentlist($equipmentlist)
+  public function setEquipmentlist($equipmentList)
   {
-    $this->equipmentlist = $equipmentlist;
+
+    $this->equipmentList = $equipmentList;
   }
 
   /**
